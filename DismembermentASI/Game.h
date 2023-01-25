@@ -6,6 +6,12 @@ namespace Game {
 
 	bool InititalizeGame();
 
+	inline BYTE* GetScriptGuidForEntityIndex(int handle)
+	{
+		return ((BYTE*(__fastcall*)(int))
+			(*g_addresses.get("game"))["getScriptGuidForEntityIndex"].addr)(handle);
+	}
+
 	inline int GetBoneIndexForId(CEntity entity, uint16_t boneId) 
 	{
 		return ((int(__fastcall*)(CEntity, uint16_t))

@@ -7,9 +7,27 @@ bool Game::InititalizeGame()
 {
 	auto addresses = g_addresses.getOrCreate("game");
 
+#pragma region getScriptEntityIndex
+
+	// SHV uses E8 ? ? ? ? 49 8D 76 ? 8B + 0x1 so we use a entirely different function where we don't need to deal with CEntity bullshit
+	auto pattern = BytePattern("48 8B FA C6 44 24 ? ? E8");
+
+	if (!pattern.bSuccess) {
+
+		LOG("Failed to find getScriptGuidForEntityIndex pattern.");
+		return false;
+	}
+
+	auto result = pattern.rip(9);
+
+	addresses->insert("getScriptGuidForEntityIndex", result);
+
+#pragma endregion
+
+
 	#pragma region getBoneIndexForId
 
-	auto pattern = BytePattern("BA ? ? ? ? 48 8B CE E8 ? ? ? ? 8B D0");
+	pattern = BytePattern("BA ? ? ? ? 48 8B CE E8 ? ? ? ? 8B D0");
 
 	if ( !pattern.bSuccess ) {
 
@@ -17,7 +35,7 @@ bool Game::InititalizeGame()
 		return false;
 	}
 
-	auto result = pattern.rip(9);
+	result = pattern.rip(9);
 
 	addresses->insert("getBoneIndexForId", result);
 
