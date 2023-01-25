@@ -8,7 +8,7 @@ using namespace Game;
 
 #define DLL_EXPORT extern "C" __declspec( dllexport )
 
-typedef __int64 (*fragCache__DrawSkeleton)(rage::fragCache*, void*, int, CBaseModelInfo*, int, __int64, uint8_t, uint8_t, short, short, float);
+typedef __int64 (__fastcall *fragCache__DrawSkeleton)(rage::fragCache*, void*, int, CBaseModelInfo*, int, __int64, uint8_t, uint8_t, short, short, float);
 
 static std::vector<CallHook<fragCache__DrawSkeleton>*> g_drawFunctions;
 
@@ -56,10 +56,10 @@ __int64 fragCache__DrawSkeleton_Hook(rage::fragCache* fragCache, void * drawBuff
 			{
 				if (it->second.startBoneId != -1) 
 				{
-					startBoneIndex = GetBoneIndexForId(pedAddress, it->second.startBoneId);
-
+					startBoneIndex = fragCache->m_skeleton->GetBoneIndexForId(it->second.startBoneId);
+					
 					if (it->second.endBoneId != -1)
-						lastSiblingIndex = GetBoneIndexForId(pedAddress, it->second.endBoneId);
+						lastSiblingIndex = fragCache->m_skeleton->GetBoneIndexForId(it->second.endBoneId);
 
 					else
 						lastSiblingIndex = GetLastSiblingBoneIndex(fragCache, startBoneIndex);

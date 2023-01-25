@@ -16,7 +16,7 @@ namespace rage
 
 	struct BlockMap;
 
-	template<typename T, bool Physical = false>
+	template<class T, bool Physical = false>
 	class pgPtr
 	{
 		union

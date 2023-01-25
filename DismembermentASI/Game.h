@@ -12,12 +12,6 @@ namespace Game {
 			(*g_addresses.get("game"))["getScriptGuidForEntityIndex"].addr)(handle);
 	}
 
-	inline int GetBoneIndexForId(CEntity entity, uint16_t boneId) 
-	{
-		return ((int(__fastcall*)(CEntity, uint16_t))
-			(*g_addresses.get("game"))["getBoneIndexForId"].addr)(entity, boneId);
-	}
-
 	inline rage::fragCache* GetEntityFragCache(CEntity entity) 
 	{
 		return ((rage::fragCache*(__fastcall*)(CEntity))

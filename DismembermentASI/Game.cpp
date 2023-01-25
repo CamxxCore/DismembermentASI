@@ -24,24 +24,7 @@ bool Game::InititalizeGame()
 
 #pragma endregion
 
-
-	#pragma region getBoneIndexForId
-
-	pattern = BytePattern("BA ? ? ? ? 48 8B CE E8 ? ? ? ? 8B D0");
-
-	if ( !pattern.bSuccess ) {
-
-		LOG("Failed to find getBoneIndexForId pattern.");
-		return false;
-	}
-
-	result = pattern.rip(9);
-
-	addresses->insert("getBoneIndexForId", result);
-
-	#pragma endregion
-
-	#pragma region getEntityFragCache
+#pragma region getEntityFragCache
 
 	pattern = BytePattern("0F BA 77 ? ? 44 8B D3");
 
@@ -55,9 +38,9 @@ bool Game::InititalizeGame()
 
 	addresses->insert("getEntityFragCache", result);
 
-	#pragma endregion
+#pragma endregion
 
-	#pragma region getLastSiblingBoneIndex
+#pragma region getLastSiblingBoneIndex
 
 	pattern = BytePattern("33 D2 45 0F BF 48 ?");
 
@@ -71,7 +54,7 @@ bool Game::InititalizeGame()
 
 	addresses->insert("getLastSiblingBoneIndex", result);
 
-	#pragma endregion
+#pragma endregion
 
 	return true;
 }

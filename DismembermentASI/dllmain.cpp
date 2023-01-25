@@ -19,6 +19,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #ifdef _DEBUG
 		scriptUnregister(scriptMain);
 #endif
+		break;
 	}
 	return TRUE;
 }

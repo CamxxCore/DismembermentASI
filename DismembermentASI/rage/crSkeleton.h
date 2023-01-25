@@ -6,7 +6,7 @@ namespace rage
 	{
 		int m_boneId; // unique hash ID for this bone
 		int m_index; // index of this bone in the skeleton
-		UINT64 m_unk;
+		int64_t *m_nextBoneInPair; //??
 	};
 
 	struct crBoneData
@@ -15,7 +15,7 @@ namespace rage
 		int16_t m_nextSiblingIndex; // 0x30-0x32
 		int16_t m_parentBoneIndex; //0x32-0x34
 		int m_unk; //0x34-0x38
-		const char * m_boneName; //0x38-0x40
+		const char *m_boneName; //0x38-0x40
 		int16_t m_unkIndex; // 0x40-0x42
 		int16_t m_boneIndex; //0x42-0x44
 		int16_t m_boneId; //0x44-0x48
@@ -56,10 +56,34 @@ namespace rage
 		uint32_t m_unk68; //0x68-0x6C
 		uint32_t m_unk6C; //0x6C-0x70
 
-		const char * getBoneName(int boneIndex) const
+		inline const char* getBoneName(int boneIndex) const
 		{
 			if (boneIndex >= m_numBones) return 0;
 			return m_boneData[boneIndex].m_boneName;
+		}
+
+		constexpr inline int GetBoneIndexForId(int boneId) const
+		{
+			if (m_count == 0)
+			{
+				if (boneId < m_count)
+					return boneId;
+
+				return -1;
+			}
+
+			if (m_size == 0)
+				return -1;
+
+			auto bonePair = (reinterpret_cast<int64_t*>(*m_boneMap) + (boneId % m_size));
+
+			for (auto pCrBone = reinterpret_cast<crBone*>(*bonePair); pCrBone != nullptr; pCrBone = reinterpret_cast<crBone*>(pCrBone->m_nextBoneInPair))
+			{
+				if (boneId == pCrBone->m_boneId)
+					return pCrBone->m_index;
+			}
+
+			return -1;
 		}
 
 	}; static_assert(sizeof(crSkeletonData) == 0x70, "crSkeletonData is of wrong size");// sizeof=0x70
