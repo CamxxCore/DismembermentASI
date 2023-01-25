@@ -10,7 +10,7 @@ namespace rage
 		virtual ~datBase() {}
 	}; static_assert(sizeof(datBase) == 0x8, "datBase is of wrong size");
 
-	typedef __m128 CVector; //CVector for SMID vector
+	typedef __m128 CVector; //CVector for SIMD vector
 
 	struct Matrix34
 	{
@@ -35,6 +35,14 @@ namespace rage
 		struct { T x, y, z; };
 	};
 	typedef vector3<float> fvector3;
+
+	template<typename T>
+	union vector4
+	{
+		T data[4];
+		struct { T x, y, z, w; };
+	};
+	typedef vector4<float> fvector4;
 
 	template<typename T>
 	union matrix44

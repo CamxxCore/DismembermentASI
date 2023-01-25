@@ -192,6 +192,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="rage\CBaseModelInfo.h" />
     <ClInclude Include="rage\CEntity.h" />
     <ClInclude Include="rage\CPed.h" />
     <ClInclude Include="rage\crSkeleton.h" />

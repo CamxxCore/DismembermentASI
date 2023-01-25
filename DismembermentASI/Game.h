@@ -24,9 +24,9 @@ namespace Game {
 			(*g_addresses.get("game"))["getEntityFragCache"].addr)(entity);
 	}
 
-	inline int GetLastSiblingBoneIndex(rage::fragCache* fragCache, int boneId)
+	inline int GetLastSiblingBoneIndex(rage::fragCache* fragCache, uint16_t boneId)
 	{
-		return ((int(__fastcall*)(rage::fragCache*, int))
+		return ((int(__fastcall*)(rage::fragCache*, uint16_t))
 			(*g_addresses.get("game"))["getLastSiblingBoneIndex"].addr)(fragCache, boneId);
 	}
 }

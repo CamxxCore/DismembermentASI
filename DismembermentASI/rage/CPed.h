@@ -57,7 +57,7 @@ public:
     char pad_018C[76]; //0x018C
     eGameState m_gameState; //0x01D8
     char pad_01DC[12]; //0x01DC
-    class CPed* m_ped; //0x01E8
+    class CPed *m_ped; //0x01E8
     char pad_01F0[40]; //0x01F0
     uint32_t m_frameFlags; //0x0218
     char pad_021C[52]; //0x021C
@@ -99,14 +99,14 @@ public:
     char pad0[20];
     rage::fvector3 m_velocity; //0x0300
     char m_unk030C[260]; //0x030C
-    class CPedBoneInfo m_boneInfo[9]; //0x0410
+    CPedBoneInfo m_boneInfo[9]; //0x0410
     char m_unk04A0[2160]; //0x04A0
     void *m_vehicle; //0x0D10
     char m_unk0D18[896]; //0x0D18
     uint32_t m_pedType; //0x1098
     char m_unk109C[4]; //0x109C
-    rage::pgPtr<CPedOxygenInfo>* m_oxygenInfo; //0x10A0
-    rage::pgPtr<CPlayerInfo> *m_playerInfo; //0x10A8
+    CPedOxygenInfo* m_oxygenInfo; //0x10A0
+    CPlayerInfo *m_playerInfo; //0x10A8
     void* m_inventory; //0x10B0
     void *m_weaponManager; //0x10B8
     char m_unk10C0[892]; //0x10C0

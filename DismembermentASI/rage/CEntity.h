@@ -70,15 +70,15 @@ namespace rage
     class fwEntity : public fwExtensibleBase
     {
     public:
-        void* m_modelInfo; //0x0020
+        CBaseModelInfo* m_modelInfo; //0x0020
         char pad28; //0x0028
         uint8_t m_entityType; //0x0029
         char pad2A[2]; //0x002A
         uint8_t m_invisible; //0x002C
         char pad2D[3]; //0x002D
-        pgPtr<CNavigation> *m_navigation; //0x0030
+        CNavigation *m_navigation; //0x0030
         char pad38[16]; //0x0038
-        pgPtr<fwDrawData> *m_drawData; //0x0048
+        fwDrawData* m_drawData; //0x0048
         char pad50[16]; //0x0050
         fmatrix44 m_transformationMatrix; //0x0060
         uint64_t m_unkA0; //0x00A0

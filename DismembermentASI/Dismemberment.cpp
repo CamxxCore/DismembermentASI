@@ -8,8 +8,7 @@ using namespace Game;
 
 #define DLL_EXPORT extern "C" __declspec( dllexport )
 
-typedef __int64 (*fragCache__DrawSkeleton)(rage::fragCache*, void*, int,
-	void*, int, __int64, uint8_t, uint8_t, short, short, float);
+typedef __int64 (*fragCache__DrawSkeleton)(rage::fragCache*, void*, int, CBaseModelInfo*, int, __int64, uint8_t, uint8_t, short, short, float);
 
 static std::vector<CallHook<fragCache__DrawSkeleton>*> g_drawFunctions;
 
@@ -35,13 +34,14 @@ typedef CPed* Cped;
 /**
  * Main function where the skeleton is drawn by the engine.
  */
-__int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuffer, int isFragment, void * modelInfo, int bUnk, __int64 unkBoneIndex, uint8_t unkIdx, uint8_t subFragCache, short startBoneIndex, short lastSiblingIndex, float drawScale) {
+__int64 fragCache__DrawSkeleton_Hook(rage::fragCache* fragCache, void * drawBuffer, int isFragment, CBaseModelInfo* modelInfo, int bUnk, __int64 unkBoneIndex, uint8_t unkIdx, uint8_t subFragCache, short startBoneIndex, short lastSiblingIndex, float drawScale)
+{
 	
 	std::unique_lock<std::mutex> lock(g_mutex);
 
 	for (auto it = g_pedList.begin(); it != g_pedList.end();)
 	{
-		Cped pedAddress = (Cped)GetScriptGuidForEntityIndex(it->first);
+		auto pedAddress = (Cped)GetScriptGuidForEntityIndex(it->first);
 
 		if (!pedAddress)
 		{
@@ -54,8 +54,8 @@ __int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuf
 
 			if (pedCache && pedCache == fragCache)
 			{
-				if (it->second.startBoneId != -1) {
-
+				if (it->second.startBoneId != -1) 
+				{
 					startBoneIndex = GetBoneIndexForId(pedAddress, it->second.startBoneId);
 
 					if (it->second.endBoneId != -1)
