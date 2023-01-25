@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <fstream>
 #include <time.h>
+#include <xmmintrin.h>
 
 #include "Utility/MemAddr.h"
 #include "Utility/AddressMgr.h"

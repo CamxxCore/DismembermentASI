@@ -86,7 +86,7 @@ namespace rage
 		pgPtr<BlockMap> m_blockMap;
 
 	public:
-		void SetBlockMap() { m_blockMap = new(false) BlockMap; }
+		void SetBlockMap() { m_blockMap = new(false) BlockMap;}
 
 		pgBase()
 		{
@@ -94,5 +94,5 @@ namespace rage
 		}
 
 		virtual ~pgBase() { }
-	};
+	}; static_assert(sizeof(pgBase) == 0x10, "pgBase is of wrong size");
 }

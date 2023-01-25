@@ -83,7 +83,7 @@ void initialize() {
 		return;
 	}
 
-	auto pattern = BytePattern((BYTE*)"\x0F\x18\x00\x48\x8B\xCA", "xxxxxx");
+	auto pattern = BytePattern("0F 18 ? 48 8B CA");
 
 	if (!pattern.bSuccess) {
 
@@ -91,12 +91,12 @@ void initialize() {
 		return;
 	}
 
-	auto address = pattern.get(368);
+	auto address = pattern.get(0x170);
 
 
 	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)address, fragCache__DrawSkeleton_Hook));
 
-	pattern = BytePattern((BYTE*)"\x44\x88\x44\x24\x00\x45\x8B\xC4", "xxxx?xxx");
+	pattern = BytePattern("44 88 44 24 ? 45 8B C4");
 
 	if (!pattern.bSuccess) {
 
@@ -104,11 +104,11 @@ void initialize() {
 		return;
 	}
 
-	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(-155), fragCache__DrawSkeleton_Hook));
+	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(-0x9B), fragCache__DrawSkeleton_Hook));
 
 	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(11), fragCache__DrawSkeleton_Hook));
 
-	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(125), fragCache__DrawSkeleton_Hook));
+	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(0x7D), fragCache__DrawSkeleton_Hook));
 }
 
 DLL_EXPORT void AddBoneDraw(Ped handle, int start, int end)

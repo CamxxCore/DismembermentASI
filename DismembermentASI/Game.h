@@ -1,16 +1,10 @@
 #pragma once
 
-typedef void *CPed, *CEntity;
+typedef void* CPed, * CEntity;
 
 namespace Game {
 
 	bool InititalizeGame();
-
-	inline int GetEntityScriptIndex(CEntity entity) 
-	{
-		return ((int(__fastcall*)(CEntity))
-			(*g_addresses.get("game"))["getScriptEntityIndex"].addr)(entity);
-	}
 
 	inline int GetBoneIndexForId(CEntity entity, uint16_t boneId) 
 	{

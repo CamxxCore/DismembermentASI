@@ -8,9 +8,9 @@ namespace rage
 	{
 	public:
 		virtual ~datBase() {}
-	};
+	}; static_assert(sizeof(datBase) == 0x8, "datBase is of wrong size");
 
-	typedef float CVector[4];
+	typedef __m128 CVector;
 
 	struct Matrix34
 	{
