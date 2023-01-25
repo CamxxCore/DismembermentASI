@@ -167,7 +167,7 @@
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
@@ -192,6 +192,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="rage\CEntity.h" />
+    <ClInclude Include="rage\CPed.h" />
     <ClInclude Include="rage\crSkeleton.h" />
     <ClInclude Include="rage\datBase.h" />
     <ClInclude Include="rage\fragCache.h" />

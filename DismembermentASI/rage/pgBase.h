@@ -86,7 +86,7 @@ namespace rage
 		pgPtr<BlockMap> m_blockMap;
 
 	public:
-		void SetBlockMap() { m_blockMap = new(false) BlockMap;}
+		void SetBlockMap() { m_blockMap; }
 
 		pgBase()
 		{

@@ -30,6 +30,8 @@ std::map<Ped, DrawSkeletonInfo> g_pedList;
 
 std::mutex g_mutex;
 
+typedef CPed* pCped;
+
 /**
  * Main function where the skeleton is drawn by the engine.
  */
@@ -39,7 +41,7 @@ __int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuf
 
 	for (auto it = g_pedList.begin(); it != g_pedList.end();)
 	{
-		CPed pedAddress = getScriptHandleBaseAddress(it->first);
+		pCped pedAddress = (pCped)getScriptHandleBaseAddress(it->first);
 
 		if (!pedAddress)
 		{

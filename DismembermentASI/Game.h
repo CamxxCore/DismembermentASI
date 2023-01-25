@@ -1,6 +1,6 @@
 #pragma once
 
-typedef void* CPed, * CEntity;
+typedef rage::CEntity* CEntity;
 
 namespace Game {
 
