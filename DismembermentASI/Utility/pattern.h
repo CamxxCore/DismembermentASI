@@ -30,7 +30,7 @@ private:
 		static const uintptr_t moduleBase = static_cast<uintptr_t>(ntHeaders->OptionalHeader.ImageBase);
 		static const uintptr_t moduleEnd = moduleBase + static_cast<uintptr_t>(ntHeaders->OptionalHeader.SizeOfImage);
 
-		uintptr_t address = FindPattern(moduleBase, moduleEnd, pattern);
+		const uintptr_t address = FindPattern(moduleBase, moduleEnd, pattern);
 		if (address != NULL)
 		{
 			pResult = reinterpret_cast<T>(address);
