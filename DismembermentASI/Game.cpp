@@ -7,25 +7,27 @@ bool Game::InititalizeGame()
 {
 	auto addresses = g_addresses.getOrCreate("game");
 
-	#pragma region getScriptEntityIndex
+#pragma region getScriptEntityIndex
 
-	auto pattern = BytePattern((BYTE*)"\x49\x2B\x00\x49\x63\x48\x14", "xxxxxxx");
+	// SHV uses E8 ? ? ? ? 49 8D 76 ? 8B + 0x1 so we use a entirely different function where we don't need to deal with CEntity bullshit
+	auto pattern = BytePattern("48 8B FA C6 44 24 ? ? E8");
 
-	if ( !pattern.bSuccess ) {
+	if (!pattern.bSuccess) {
 
-		LOG("Failed to find getScriptEntityIndex pattern.");
+		LOG("Failed to find getScriptGuidForEntityIndex pattern.");
 		return false;
 	}
 
-	auto result = pattern.get(-95);
+	auto result = pattern.rip(9);
 
-	addresses->insert("getScriptEntityIndex", result);
+	addresses->insert("getScriptGuidForEntityIndex", result);
 
-	#pragma endregion
+#pragma endregion
+
 
 	#pragma region getBoneIndexForId
 
-	pattern = BytePattern((BYTE*)"\xBA\x00\x00\x00\x00\x48\x8B\xCE\xE8\x00\x00\x00\x00\x8B\xD0", "x????xxxx????xx");
+	pattern = BytePattern("BA ? ? ? ? 48 8B CE E8 ? ? ? ? 8B D0");
 
 	if ( !pattern.bSuccess ) {
 
@@ -33,15 +35,15 @@ bool Game::InititalizeGame()
 		return false;
 	}
 
-	result = pattern.get(9);
+	result = pattern.rip(9);
 
-	addresses->insert("getBoneIndexForId", result + *(int32_t*)result + 4);
+	addresses->insert("getBoneIndexForId", result);
 
 	#pragma endregion
 
 	#pragma region getEntityFragCache
 
-	pattern = BytePattern((BYTE*)"\x0F\xBA\x77\x00\x00\x44\x8B\xD3", "xxx??xxx");
+	pattern = BytePattern("0F BA 77 ? ? 44 8B D3");
 
 	if ( !pattern.bSuccess ) {
 
@@ -49,15 +51,15 @@ bool Game::InititalizeGame()
 		return false;
 	}
 
-	result = pattern.get(-4);
+	result = pattern.rip(-4);
 
-	addresses->insert("getEntityFragCache", result + *(int32_t*)result + 4);
+	addresses->insert("getEntityFragCache", result);
 
 	#pragma endregion
 
 	#pragma region getLastSiblingBoneIndex
 
-	pattern = BytePattern((BYTE*)"\x33\xD2\x45\x0F\xBF\x48\x00", "xxxxxx?");
+	pattern = BytePattern("33 D2 45 0F BF 48 ?");
 
 	if (!pattern.bSuccess) {
 
@@ -65,7 +67,7 @@ bool Game::InititalizeGame()
 		return false;
 	}
 
-	result = pattern.get(-21);
+	result = pattern.get(-0x15);
 
 	addresses->insert("getLastSiblingBoneIndex", result);
 

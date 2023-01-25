@@ -19,17 +19,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "stdafx.h"
+#include "..\stdafx.h"
 
 // Size of each memory block. (= page size of VirtualAlloc)
-const uint64_t MEMORY_BLOCK_SIZE = 0x1000;
+constexpr uint64_t MEMORY_BLOCK_SIZE = 0x1000;
 
 // Max range for seeking a memory block. (= 1024MB)
-const uint64_t MAX_MEMORY_RANGE = 0x40000000;
+constexpr uint64_t MAX_MEMORY_RANGE = 0x40000000;
 
 PVOID HookManager::AllocateFunctionStub(PVOID origin, PVOID function, int type)
 {
 	static void* g_currentStub = nullptr;
+	static void* g_stubMemoryStart = nullptr;
 
 	if (!g_currentStub) {
 		SYSTEM_INFO si;
@@ -49,10 +50,9 @@ PVOID HookManager::AllocateFunctionStub(PVOID origin, PVOID function, int type)
 			if (pAlloc == NULL)
 				break;
 
-			g_currentStub =
-				VirtualAlloc(pAlloc, MEMORY_BLOCK_SIZE, MEM_COMMIT | MEM_RESERVE,
-					PAGE_EXECUTE_READWRITE);
+			g_currentStub = VirtualAlloc(pAlloc, MEMORY_BLOCK_SIZE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 			if (g_currentStub != NULL)
+				g_stubMemoryStart = g_currentStub;
 				break;
 		}
 	}
@@ -71,6 +71,10 @@ PVOID HookManager::AllocateFunctionStub(PVOID origin, PVOID function, int type)
 	*(uint64_t*)(code + 12) = 0xCCCCCCCCCCCCCCCC;
 
 	g_currentStub = (void*)((uint64_t)g_currentStub + 20);
+
+	// the page is full, allocate a new page next time a stub is needed  
+	if (((uint64_t)g_currentStub - (uint64_t)g_stubMemoryStart) >= (MEMORY_BLOCK_SIZE - 20))
+		g_currentStub = nullptr;
 
 	return code;
 }

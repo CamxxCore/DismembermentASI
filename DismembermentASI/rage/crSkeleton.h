@@ -6,6 +6,7 @@ namespace rage
 	{
 		int m_boneId; // unique hash ID for this bone
 		int m_index; // index of this bone in the skeleton
+		UINT64 m_unk;
 	};
 
 	struct crBoneData
@@ -25,7 +26,7 @@ namespace rage
 		{
 			memset(this, 0x0, sizeof(crBoneData));
 		}
-	}; // sizeof=0x50
+	}; static_assert(sizeof(crBoneData) == 0x50, "crBoneData is of wrong size"); // sizeof=0x50
 
 	class crSkeletonData : pgBase
 	{
@@ -60,5 +61,6 @@ namespace rage
 			if (boneIndex >= m_numBones) return 0;
 			return m_boneData[boneIndex].m_boneName;
 		}
-	}; // sizeof=0x70
+
+	}; static_assert(sizeof(crSkeletonData) == 0x70, "crSkeletonData is of wrong size");// sizeof=0x70
 }

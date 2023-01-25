@@ -53,6 +53,15 @@
     <ClInclude Include="rage\fragCache.h">
       <Filter>rage</Filter>
     </ClInclude>
+    <ClInclude Include="rage\CEntity.h">
+      <Filter>rage</Filter>
+    </ClInclude>
+    <ClInclude Include="rage\CPed.h">
+      <Filter>rage</Filter>
+    </ClInclude>
+    <ClInclude Include="rage\CBaseModelInfo.h">
+      <Filter>rage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

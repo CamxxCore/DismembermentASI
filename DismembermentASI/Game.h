@@ -1,15 +1,15 @@
 #pragma once
 
-typedef void *CPed, *CEntity;
+typedef rage::CEntity* CEntity;
 
 namespace Game {
 
 	bool InititalizeGame();
 
-	inline int GetEntityScriptIndex(CEntity entity) 
+	inline BYTE* GetScriptGuidForEntityIndex(int handle)
 	{
-		return ((int(__fastcall*)(CEntity))
-			(*g_addresses.get("game"))["getScriptEntityIndex"].addr)(entity);
+		return ((BYTE*(__fastcall*)(int))
+			(*g_addresses.get("game"))["getScriptGuidForEntityIndex"].addr)(handle);
 	}
 
 	inline int GetBoneIndexForId(CEntity entity, uint16_t boneId) 
@@ -24,9 +24,9 @@ namespace Game {
 			(*g_addresses.get("game"))["getEntityFragCache"].addr)(entity);
 	}
 
-	inline int GetLastSiblingBoneIndex(rage::fragCache* fragCache, int boneId)
+	inline int GetLastSiblingBoneIndex(rage::fragCache* fragCache, uint16_t boneId)
 	{
-		return ((int(__fastcall*)(rage::fragCache*, int))
+		return ((int(__fastcall*)(rage::fragCache*, uint16_t))
 			(*g_addresses.get("game"))["getLastSiblingBoneIndex"].addr)(fragCache, boneId);
 	}
 }

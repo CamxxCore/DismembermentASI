@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <fstream>
 #include <time.h>
+#include <xmmintrin.h>
 
 #include "Utility/MemAddr.h"
 #include "Utility/AddressMgr.h"
@@ -24,6 +25,9 @@
 #include "rage/pgBase.h"
 #include "rage/crSkeleton.h"
 #include "rage/fragCache.h"
+#include "rage//CBaseModelInfo.h"
+#include "rage/CEntity.h"
+#include "rage/CPed.h"
 
 #pragma endregion
 

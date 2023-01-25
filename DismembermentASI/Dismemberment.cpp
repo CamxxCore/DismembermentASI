@@ -8,8 +8,7 @@ using namespace Game;
 
 #define DLL_EXPORT extern "C" __declspec( dllexport )
 
-typedef __int64 (*fragCache__DrawSkeleton)(rage::fragCache*, void*, int,
-	void*, int, __int64, uint8_t, uint8_t, short, short, float);
+typedef __int64 (*fragCache__DrawSkeleton)(rage::fragCache*, void*, int, CBaseModelInfo*, int, __int64, uint8_t, uint8_t, short, short, float);
 
 static std::vector<CallHook<fragCache__DrawSkeleton>*> g_drawFunctions;
 
@@ -30,16 +29,19 @@ std::map<Ped, DrawSkeletonInfo> g_pedList;
 
 std::mutex g_mutex;
 
+typedef CPed* Cped;
+
 /**
  * Main function where the skeleton is drawn by the engine.
  */
-__int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuffer, int isFragment, void * modelInfo, int bUnk, __int64 unkBoneIndex, uint8_t unkIdx, uint8_t subFragCache, short startBoneIndex, short lastSiblingIndex, float drawScale) {
+__int64 fragCache__DrawSkeleton_Hook(rage::fragCache* fragCache, void * drawBuffer, int isFragment, CBaseModelInfo* modelInfo, int bUnk, __int64 unkBoneIndex, uint8_t unkIdx, uint8_t subFragCache, short startBoneIndex, short lastSiblingIndex, float drawScale)
+{
 	
 	std::unique_lock<std::mutex> lock(g_mutex);
 
 	for (auto it = g_pedList.begin(); it != g_pedList.end();)
 	{
-		CPed pedAddress = getScriptHandleBaseAddress(it->first);
+		auto pedAddress = (Cped)GetScriptGuidForEntityIndex(it->first);
 
 		if (!pedAddress)
 		{
@@ -52,8 +54,8 @@ __int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuf
 
 			if (pedCache && pedCache == fragCache)
 			{
-				if (it->second.startBoneId != -1) {
-
+				if (it->second.startBoneId != -1) 
+				{
 					startBoneIndex = GetBoneIndexForId(pedAddress, it->second.startBoneId);
 
 					if (it->second.endBoneId != -1)
@@ -75,7 +77,8 @@ __int64 fragCache__DrawSkeleton_Hook(rage::fragCache * fragCache, void * drawBuf
 	return g_drawFunctions[0]->fn(fragCache, drawBuffer, isFragment, modelInfo, bUnk, unkBoneIndex, unkIdx, subFragCache, startBoneIndex, lastSiblingIndex, drawScale);
 }
 
-void initialize() {
+void initialize() 
+{
 
 	if ( !InititalizeGame() ) {
 
@@ -83,7 +86,7 @@ void initialize() {
 		return;
 	}
 
-	auto pattern = BytePattern((BYTE*)"\x0F\x18\x00\x48\x8B\xCA", "xxxxxx");
+	auto pattern = BytePattern("0F 18 ? 48 8B CA");
 
 	if (!pattern.bSuccess) {
 
@@ -91,12 +94,12 @@ void initialize() {
 		return;
 	}
 
-	auto address = pattern.get(368);
+	auto address = pattern.get(0x170);
 
 
 	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)address, fragCache__DrawSkeleton_Hook));
 
-	pattern = BytePattern((BYTE*)"\x44\x88\x44\x24\x00\x45\x8B\xC4", "xxxx?xxx");
+	pattern = BytePattern("44 88 44 24 ? 45 8B C4");
 
 	if (!pattern.bSuccess) {
 
@@ -104,11 +107,11 @@ void initialize() {
 		return;
 	}
 
-	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(-155), fragCache__DrawSkeleton_Hook));
+	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(-0x9B), fragCache__DrawSkeleton_Hook));
 
 	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(11), fragCache__DrawSkeleton_Hook));
 
-	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(125), fragCache__DrawSkeleton_Hook));
+	g_drawFunctions.push_back(HookManager::SetCall<fragCache__DrawSkeleton>((PBYTE)pattern.get(0x7D), fragCache__DrawSkeleton_Hook));
 }
 
 DLL_EXPORT void AddBoneDraw(Ped handle, int start, int end)
